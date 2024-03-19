@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  withdrawal_wallet_address: {
+    type: String,
+  },
 });
 
 async function generateReferralCode() {
@@ -35,14 +38,16 @@ async function generateReferralCode() {
       );
     }
 
-    const existingCode = await this.constructor.findOne({ referralCode: referralCode });
+    const existingCode = await this.constructor.findOne({
+      referralCode: referralCode,
+    });
     if (!existingCode) isUnique = true;
   }
 
   return referralCode;
 }
 
-userSchema.pre('save', async function(next) {
+userSchema.pre("save", async function (next) {
   const generateReferralCodeBound = generateReferralCode.bind(this);
 
   if (!this.referralCode) {

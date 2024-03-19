@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 // Import Routes
 import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/user.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json({ extended: true, limit: "30mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "30mb" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING, {
