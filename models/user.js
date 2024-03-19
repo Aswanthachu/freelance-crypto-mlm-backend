@@ -9,13 +9,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
+  hashedPassword: {
     type: String,
     required: true,
   },
-  refferalCode: {
+  referralCode: {
     type: String,
-    required: true,
     unique: true,
   },
 });
@@ -36,16 +35,18 @@ async function generateReferralCode() {
       );
     }
 
-    const existingCode = await this.findOne({ referralCode: referralCode });
+    const existingCode = await this.constructor.findOne({ referralCode: referralCode });
     if (!existingCode) isUnique = true;
   }
 
   return referralCode;
 }
 
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function(next) {
+  const generateReferralCodeBound = generateReferralCode.bind(this);
+
   if (!this.referralCode) {
-    this.referralCode = await generateReferralCode();
+    this.referralCode = await generateReferralCodeBound();
   }
   next();
 });
