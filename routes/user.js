@@ -1,6 +1,6 @@
 import express from "express";
-import { getRefCode } from "../controllers/user";
-import { isVerifiedUser } from "../middlewares/isVerifiedUser";
+import { getRefCode } from "../controllers/user.js";
+import { isVerifiedUser } from "../middlewares/isVerifiedUser.js";
 
 const router = express.Router();
 

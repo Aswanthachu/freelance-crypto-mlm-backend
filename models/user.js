@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: Number,
+    enum: [0, 1],
+    default: 0,
+  },
   hashedPassword: {
     type: String,
     required: true,

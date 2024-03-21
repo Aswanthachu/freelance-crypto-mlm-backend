@@ -3,8 +3,10 @@ import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
 
-function generateToken(email, id) {
-  return jwt.sign({ email, id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+function generateToken(email, id, role) {
+  return jwt.sign({ email, id, role }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 }
 
 export const registration = async (req, res) => {
@@ -27,7 +29,7 @@ export const registration = async (req, res) => {
 
     const newUser = await User.create({ username, email, hashedPassword });
 
-    const token = await generateToken(email, newUser._id);
+    const token = await generateToken(email, newUser._id, newUser.role);
 
     res
       .status(200)
@@ -58,7 +60,7 @@ export const login = async (req, res) => {
     if (!correctPassword)
       return res.status(400).json({ message: "Password doesn't match" });
 
-    const token = await generateToken(email, existingUser._id);
+    const token = await generateToken(email, existingUser._id, existingUser.role);
 
     res.status(200).json({ message: "User succesfully logined.", token });
   } catch (error) {
